@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { DESTINATIONS } from '@/lib/config';
 import { CoinIcon } from './Brand';
+import CountUp from './CountUp';
 
 const isSol = (s) => /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test((s || '').trim());
 
@@ -167,7 +168,7 @@ export default function Converter() {
         />
         <div className="pane-amount">
           {fees.state === 'done' ? (
-            <p className="big num">{fmt(fees.sol)}<span> SOL</span></p>
+            <p className="big num"><CountUp value={fees.sol} digits={4} /><span> SOL</span></p>
           ) : (
             <p className="big num is-empty">0.00<span> SOL</span></p>
           )}
@@ -190,7 +191,7 @@ export default function Converter() {
         </div>
         <div className="pane-row">
           {preview.state === 'done' ? (
-            <p className="big num">&asymp; {fmt(preview.amountOut, 6)}</p>
+            <p className="big num">&asymp; <CountUp value={preview.amountOut} digits={6} /></p>
           ) : (
             <p className="big num is-empty">{preview.state === 'loading' ? '\u2026' : '0.00'}</p>
           )}

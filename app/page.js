@@ -1,6 +1,7 @@
 import Converter from '@/components/Converter';
 import Rates from '@/components/Rates';
 import { CoinIcon } from '@/components/Brand';
+import Reveal from '@/components/Reveal';
 
 const HOPS = [
   { t: 'Claim', where: 'pump.fun', d: 'Your unclaimed fees from the bonding curve and PumpSwap move into your wallet.' },
@@ -27,11 +28,13 @@ const FAQ = [
 export default function Home() {
   return (
     <>
+      <Reveal />
       <section className="hero">
+        <Backdrop />
         <div className="container hero-inner">
-          <h1>Your pump.fun fees, paid out in any coin.</h1>
-          <p className="lede">Claim your creator fees and receive BTC, ETH or USDC on their own chains. One signature, and the money never passes through us.</p>
-          <div className="board">
+          <h1><span className="rise" style={{ '--d': '0ms' }}>Your pump.fun fees,</span> <span className="rise" style={{ '--d': '120ms' }}>paid out in any coin.</span></h1>
+          <p className="lede rise" style={{ '--d': '260ms' }}>Claim your creator fees and receive BTC, ETH or USDC on their own chains. One signature, and the money never passes through us.</p>
+          <div className="board rise" style={{ '--d': '420ms' }}>
             <Side side="in" />
             <Converter />
             <Side side="out" />
@@ -39,10 +42,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="how" className="section container">
+      <section id="how" className="section container" data-reveal>
         <h2 className="h2 center-text">One transaction, three hops</h2>
         <p className="lede center-text">Everything below happens from a single signature in your own wallet.</p>
         <ol className="track">
+          <span className="track-line" aria-hidden="true" />
           {HOPS.map((h, i) => (
             <li key={h.t}>
               <span className="track-n num">{i + 1}</span>
@@ -53,12 +57,12 @@ export default function Home() {
         </ol>
       </section>
 
-      <section id="coins" className="section container">
+      <section id="coins" className="section container" data-reveal>
         <h2 className="h2 center-text">What 1 SOL gets you right now</h2>
         <Rates />
       </section>
 
-      <section className="section container">
+      <section className="section container" data-reveal>
         <h2 className="h2 center-text">Cashing out, compared</h2>
         <div className="table-wrap">
           <table className="compare-table">
@@ -74,7 +78,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section container narrow-col">
+      <section className="section container narrow-col" data-reveal>
         <h2 className="h2 center-text">Questions</h2>
         <div className="faq">
           {FAQ.map(([q, a]) => (
@@ -111,9 +115,42 @@ function Side({ side }) {
               </>
             )}
           </span>
-          <span className="wire" />
+          <span className="wire"><span className="pulse" style={{ '--i': i }} /></span>
         </div>
       ))}
+    </div>
+  );
+}
+
+// Hero backdrop: a bundle of cables that pinches through the tool, a horizon arc, and a few live strands.
+function Backdrop() {
+  const strands = [];
+  for (let k = 0; k < 14; k++) {
+    const spread = (k - 6.5) * 22;
+    const y0 = 600 + spread * 1.35;
+    const yc = 640 + spread * 0.12;
+    strands.push(`M-40 ${y0.toFixed(1)} C 420 ${y0.toFixed(1)}, 520 ${yc.toFixed(1)}, 720 ${yc.toFixed(1)} S 1020 ${y0.toFixed(1)}, 1480 ${y0.toFixed(1)}`);
+  }
+  return (
+    <div className="backdrop" aria-hidden="true">
+      <div className="horizon" />
+      <svg className="cables" viewBox="0 0 1440 940" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="cable-fade" x1="0" x2="1">
+            <stop offset="0" stopColor="#fff" stopOpacity="0" />
+            <stop offset=".3" stopColor="#fff" stopOpacity=".07" />
+            <stop offset=".5" stopColor="#fff" stopOpacity=".02" />
+            <stop offset=".7" stopColor="#fff" stopOpacity=".07" />
+            <stop offset="1" stopColor="#fff" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <g fill="none" stroke="url(#cable-fade)" strokeWidth="1">
+          {strands.map((d, i) => <path key={i} d={d} />)}
+        </g>
+        <g fill="none" stroke="#2E9BFF" strokeWidth="1.4" strokeLinecap="round">
+          {[2, 6, 9, 12].map((i, n) => <path key={i} className="strand-live" d={strands[i]} style={{ '--n': n }} pathLength="100" />)}
+        </g>
+      </svg>
     </div>
   );
 }

@@ -45,7 +45,7 @@ export default function Rates() {
             <li key={r.id}>
               <CoinIcon dest={d} size={30} />
               <span className="rate-name"><strong>{r.symbol}</strong><span>{r.chain}</span></span>
-              <span className="rate-val num">{r.perSol ? fmt(r.perSol) : '—'}</span>
+              <span className="rate-val num" key={`${r.id}-${data?.at || 0}`}>{r.perSol ? fmt(r.perSol) : '—'}</span>
             </li>
           );
         })}
