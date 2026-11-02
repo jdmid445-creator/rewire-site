@@ -148,7 +148,7 @@ export default function Converter() {
     <div className="tool card" aria-live="polite">
       <div className="tool-head">
         <h2 className="tool-title">Rewire your fees</h2>
-        <span className="tag"><span className="tag-dot" />Non-custodial</span>
+        <span className="tag"><svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M8 1.5 2.5 3.5v4c0 3.2 2.3 5.9 5.5 7 3.2-1.1 5.5-3.8 5.5-7v-4z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" /></svg>You sign, we never hold</span>
       </div>
 
       <div className="pane">

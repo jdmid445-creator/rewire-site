@@ -1,31 +1,19 @@
 import Converter from '@/components/Converter';
+import Rates from '@/components/Rates';
 import { CoinIcon } from '@/components/Brand';
-import { DESTINATIONS } from '@/lib/config';
 
-const STATS = [
-  { n: '10', l: 'Coins to receive' },
-  { n: '8', l: 'Chains' },
-  { n: '1', l: 'Signature' },
-  { n: '0', l: 'Funds held by us' },
+const HOPS = [
+  { t: 'Claim', where: 'pump.fun', d: 'Your unclaimed fees from the bonding curve and PumpSwap move into your wallet.' },
+  { t: 'Hand off', where: 'NEAR Intents', d: 'In the same transaction, exactly the quoted SOL goes to a one-time deposit address.' },
+  { t: 'Deliver', where: 'your chain', d: 'Solvers fill the swap and your coin lands at your address, usually within minutes.' },
 ];
 
-const STEPS = [
-  { t: 'Paste your wallet', d: 'We read the unclaimed creator fees on the bonding curve and PumpSwap. No wallet connection needed to look.' },
-  { t: 'Pick a coin', d: 'BTC, ETH, USDC on four chains and more. You see the live rate and the address it lands in before you sign.' },
-  { t: 'Sign once', d: 'One transaction claims your fees and hands them to a NEAR Intents swap. Your coins arrive in a few minutes.' },
-];
-
-const BEFORE = [
-  'Claim on pump.fun, then open a bridge',
-  'Swap, bridge, wait, then swap again',
-  'Three or four transactions and fees on each',
-  'Bridges and swaps that each take a cut',
-];
-const AFTER = [
-  'Claim and convert in one transaction',
-  'Any of 10 coins, delivered on its own chain',
-  'Live rate shown before you sign',
-  'Refunds go straight back to your wallet',
+const COMPARE = [
+  ['Transactions to sign', 'Three or more', 'One'],
+  ['Apps involved', 'pump.fun, a DEX, a bridge', 'Rewire'],
+  ['See the final amount first', 'Rarely', 'Always'],
+  ['If something fails', 'Funds stuck mid-bridge', 'Refunded to your wallet'],
+  ['Fee settings changed', 'Sometimes', 'Never'],
 ];
 
 const FAQ = [
@@ -40,61 +28,49 @@ export default function Home() {
   return (
     <>
       <section className="hero">
-        <Wires />
         <div className="container hero-inner">
           <h1>Your pump.fun fees, paid out in any coin.</h1>
-          <p className="lede">
-            Claim your creator fees and receive BTC, ETH, USDC and more on their own chains. One signature, and your fees never touch our wallets.
-          </p>
-          <Converter />
+          <p className="lede">Claim your creator fees and receive BTC, ETH or USDC on their own chains. One signature, and the money never passes through us.</p>
+          <div className="board">
+            <Side side="in" />
+            <Converter />
+            <Side side="out" />
+          </div>
         </div>
       </section>
 
-      <section className="container">
-        <ul className="stats">
-          {STATS.map((s) => (
-            <li key={s.l}><strong className="num">{s.n}</strong><span>{s.l}</span></li>
-          ))}
-        </ul>
-      </section>
-
       <section id="how" className="section container">
-        <h2 className="h2 center-text">How it works</h2>
-        <ol className="steps">
-          {STEPS.map((s, i) => (
-            <li key={s.t} className="card step">
-              <span className="step-num num">{i + 1}</span>
-              <h3>{s.t}</h3>
-              <p>{s.d}</p>
+        <h2 className="h2 center-text">One transaction, three hops</h2>
+        <p className="lede center-text">Everything below happens from a single signature in your own wallet.</p>
+        <ol className="track">
+          {HOPS.map((h, i) => (
+            <li key={h.t}>
+              <span className="track-n num">{i + 1}</span>
+              <h3>{h.t} <span className="track-where">on {h.where}</span></h3>
+              <p>{h.d}</p>
             </li>
           ))}
         </ol>
       </section>
 
       <section id="coins" className="section container">
-        <h2 className="h2 center-text">Receive it how you want it</h2>
-        <p className="lede center-text">Every payout is delivered on its own chain, straight to your address.</p>
-        <ul className="coin-row">
-          {DESTINATIONS.map((d) => (
-            <li key={d.id}>
-              <CoinIcon dest={d} size={28} />
-              <span><strong>{d.symbol}</strong><span>{d.chain}</span></span>
-            </li>
-          ))}
-        </ul>
+        <h2 className="h2 center-text">What 1 SOL gets you right now</h2>
+        <Rates />
       </section>
 
       <section className="section container">
-        <h2 className="h2 center-text">One step instead of several</h2>
-        <div className="compare">
-          <div className="card compare-card">
-            <h3>Cashing out the usual way</h3>
-            <ul>{BEFORE.map((x) => <li key={x}><Dash />{x}</li>)}</ul>
-          </div>
-          <div className="card compare-card is-rewire">
-            <h3>With Rewire</h3>
-            <ul>{AFTER.map((x) => <li key={x}><Check />{x}</li>)}</ul>
-          </div>
+        <h2 className="h2 center-text">Cashing out, compared</h2>
+        <div className="table-wrap">
+          <table className="compare-table">
+            <thead>
+              <tr><th scope="col"><span className="sr-only">Step</span></th><th scope="col">The usual way</th><th scope="col">With Rewire</th></tr>
+            </thead>
+            <tbody>
+              {COMPARE.map(([k, a, b]) => (
+                <tr key={k}><th scope="row">{k}</th><td>{a}</td><td>{b}</td></tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
@@ -113,36 +89,31 @@ export default function Home() {
   );
 }
 
-// Two wires come in from each side and meet behind the tool. Mirrored so the hero stays symmetric.
-function Wires() {
-  const side = (
-    <>
-      <path d="M0 140 C 260 140, 330 300, 560 300" />
-      <path d="M0 230 C 240 230, 340 340, 560 340" />
-      <path d="M0 330 C 250 330, 330 380, 560 380" />
-    </>
-  );
+// Schematic on either side of the tool: fee sources wire in on the left, payout coins wire out on the right.
+function Side({ side }) {
+  const items = side === 'in'
+    ? [{ label: 'Bonding curve', sub: 'Creator fees' }, { label: 'PumpSwap', sub: 'Creator fees' }, { label: 'Fee split', sub: 'Your share' }]
+    : [{ coin: 'btc' }, { coin: 'eth' }, { coin: 'usdc-base' }];
   return (
-    <svg className="wires" viewBox="0 0 1440 640" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
-      <defs>
-        <linearGradient id="wire-l" x1="0" x2="1">
-          <stop offset="0" stopColor="#2E9BFF" stopOpacity="0" />
-          <stop offset="1" stopColor="#2E9BFF" stopOpacity=".55" />
-        </linearGradient>
-        <linearGradient id="wire-r" x1="1" x2="0">
-          <stop offset="0" stopColor="#2E9BFF" stopOpacity="0" />
-          <stop offset="1" stopColor="#2E9BFF" stopOpacity=".55" />
-        </linearGradient>
-      </defs>
-      <g fill="none" stroke="url(#wire-l)" strokeWidth="1.5">{side}</g>
-      <g fill="none" stroke="url(#wire-r)" strokeWidth="1.5" transform="translate(1440 0) scale(-1 1)">{side}</g>
-    </svg>
+    <div className={`side side-${side}`} aria-hidden="true">
+      {items.map((it, i) => (
+        <div className="node-row" key={i}>
+          <span className="node">
+            {it.coin ? (
+              <>
+                <CoinIcon dest={it.coin} size={22} />
+                <span><strong>{it.coin === 'usdc-base' ? 'USDC' : it.coin.toUpperCase()}</strong><span>{it.coin === 'btc' ? 'Bitcoin' : it.coin === 'eth' ? 'Ethereum' : 'Base'}</span></span>
+              </>
+            ) : (
+              <>
+                <img src="/coins/sol.svg" alt="" width="22" height="22" />
+                <span><strong>{it.label}</strong><span>{it.sub}</span></span>
+              </>
+            )}
+          </span>
+          <span className="wire" />
+        </div>
+      ))}
+    </div>
   );
-}
-
-function Check() {
-  return <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>;
-}
-function Dash() {
-  return <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M4 8h8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>;
 }

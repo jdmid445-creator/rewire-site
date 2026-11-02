@@ -1,4 +1,5 @@
-import '@fontsource-variable/onest';
+import '@fontsource-variable/funnel-display';
+import '@fontsource-variable/funnel-sans';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SITE } from '@/lib/config';
