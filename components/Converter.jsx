@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { DESTINATIONS } from '@/lib/config';
+import { CoinIcon } from './Brand';
 
 const isSol = (s) => /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test((s || '').trim());
 
@@ -36,6 +37,7 @@ export default function Converter() {
   const [preview, setPreview] = useState({ state: 'idle' });
   const [run, setRun] = useState({ state: 'idle' });
   const [mobileNoWallet, setMobileNoWallet] = useState(false);
+  const [picking, setPicking] = useState(false);
   const pollRef = useRef(null);
 
   const d = DESTINATIONS.find((x) => x.id === dest);
@@ -140,85 +142,101 @@ export default function Converter() {
   const canClaim = fees.state === 'done' && fees.enough && addrOk && preview.state === 'done' && run.state !== 'working';
   const busy = run.state === 'working';
 
-  return (
-    <div className="tool" aria-live="polite">
-      <div className="slip">
-        <label className="field">
-          <span className="field-label">Creator wallet</span>
-          <input
-            className="input"
-            value={wallet}
-            onChange={(e) => setWallet(e.target.value)}
-            placeholder="Paste a Solana address"
-            spellCheck={false}
-            autoComplete="off"
-          />
-        </label>
+  const mins = Math.max(1, Math.round((preview.timeEstimate || 60) / 60));
 
-        <div className="amount" data-state={fees.state}>
-          {fees.state === 'idle' && <p className="hint">Unclaimed fees show up here.</p>}
-          {fees.state === 'loading' && <p className="hint">Reading pump.fun&hellip;</p>}
-          {fees.state === 'error' && <p className="error">{fees.error}</p>}
-          {fees.state === 'done' && (
-            <>
-              <p className="big">{fmt(fees.sol)} <span>SOL</span></p>
-              <p className="hint">
-                {fees.enough
-                  ? 'Unclaimed creator fees, ready to convert.'
-                  : `Under the ${fees.minSol} SOL minimum. Network costs would eat too much of it.`}
-              </p>
-            </>
+  return (
+    <div className="tool card" aria-live="polite">
+      <div className="tool-head">
+        <h2 className="tool-title">Rewire your fees</h2>
+        <span className="tag"><span className="tag-dot" />Non-custodial</span>
+      </div>
+
+      <div className="pane">
+        <div className="pane-top">
+          <span className="label">You claim</span>
+          <span className="pane-src"><img src="/coins/sol.svg" alt="" width="18" height="18" />pump.fun fees</span>
+        </div>
+        <input
+          className="input"
+          value={wallet}
+          onChange={(e) => setWallet(e.target.value)}
+          placeholder="Paste your creator wallet"
+          aria-label="Creator wallet"
+          spellCheck={false}
+          autoComplete="off"
+        />
+        <div className="pane-amount">
+          {fees.state === 'done' ? (
+            <p className="big num">{fmt(fees.sol)}<span> SOL</span></p>
+          ) : (
+            <p className="big num is-empty">0.00<span> SOL</span></p>
           )}
+          <p className={fees.state === 'error' || (fees.state === 'done' && !fees.enough) ? 'note warn' : 'note'}>
+            {fees.state === 'idle' && 'Unclaimed fees show up as soon as you paste.'}
+            {fees.state === 'loading' && 'Reading pump.fun\u2026'}
+            {fees.state === 'error' && fees.error}
+            {fees.state === 'done' && (fees.enough ? 'Unclaimed and ready to rewire.' : `Below the ${fees.minSol} SOL minimum, so network costs would eat most of it.`)}
+          </p>
         </div>
       </div>
 
-      <div className="slip">
-        <fieldset className="field">
-          <legend className="field-label">Receive as</legend>
-          <div className="picker">
+      <div className="swap-arrow" aria-hidden="true">
+        <svg viewBox="0 0 16 16" width="14" height="14"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+      </div>
+
+      <div className="pane">
+        <div className="pane-top">
+          <span className="label">You receive</span>
+        </div>
+        <div className="pane-row">
+          {preview.state === 'done' ? (
+            <p className="big num">&asymp; {fmt(preview.amountOut, 6)}</p>
+          ) : (
+            <p className="big num is-empty">{preview.state === 'loading' ? '\u2026' : '0.00'}</p>
+          )}
+          <button type="button" className="coin-btn" aria-expanded={picking} onClick={() => setPicking((v) => !v)}>
+            <CoinIcon dest={d} size={26} />
+            <span className="coin-btn-text"><strong>{d.symbol}</strong><span>{d.chain}</span></span>
+            <svg viewBox="0 0 12 8" width="11" height="8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
+          </button>
+        </div>
+        {picking && (
+          <div className="coin-grid" role="group" aria-label="Pick a coin">
             {DESTINATIONS.map((x) => (
-              <button key={x.id} type="button" className="pick" aria-pressed={dest === x.id} onClick={() => setDest(x.id)}>
-                <strong>{x.symbol}</strong>
-                <span>{x.chain}</span>
+              <button key={x.id} type="button" className="coin-opt" aria-pressed={dest === x.id} onClick={() => { setDest(x.id); setPicking(false); }}>
+                <CoinIcon dest={x} size={22} />
+                <span><strong>{x.symbol}</strong><span>{x.chain}</span></span>
               </button>
             ))}
           </div>
-        </fieldset>
-
-        <label className="field">
-          <span className="field-label">Your {d.label} address</span>
-          <input
-            className="input"
-            value={recipient}
-            onChange={(e) => setRecipient(e.target.value)}
-            placeholder={d.addr === 'evm' ? '0x…' : d.addr === 'btc' ? 'bc1…' : d.addr === 'near' ? 'name.near' : 'Address'}
-            spellCheck={false}
-            autoComplete="off"
-          />
-        </label>
-
-        <div className="amount out" data-state={preview.state}>
-          {preview.state === 'idle' && <p className="hint">You&rsquo;ll see the live rate here.</p>}
-          {preview.state === 'loading' && <p className="hint">Getting a rate&hellip;</p>}
-          {preview.state === 'error' && <p className="error">{preview.error}</p>}
-          {preview.state === 'done' && (
-            <>
-              <p className="big">&asymp; {fmt(preview.amountOut, 6)} <span>{preview.symbol}</span></p>
-              <p className="hint">About {usd(preview.amountOutUsd)}, arriving in roughly {Math.max(1, Math.round((preview.timeEstimate || 60) / 60))} min.</p>
-            </>
-          )}
-        </div>
+        )}
+        <input
+          className="input"
+          value={recipient}
+          onChange={(e) => setRecipient(e.target.value)}
+          placeholder={`Your ${d.label} address`}
+          aria-label={`Your ${d.label} address`}
+          spellCheck={false}
+          autoComplete="off"
+        />
+        {preview.state === 'error' && <p className="note warn">{preview.error}</p>}
       </div>
+
+      <dl className="rows">
+        <div><dt>Value</dt><dd className="num">{preview.state === 'done' ? usd(preview.amountOutUsd) : '\u2014'}</dd></div>
+        <div><dt>Rewire fee</dt><dd className="num">{preview.state === 'done' ? `${(preview.feeBps / 100).toFixed(2)}%` : '\u2014'}</dd></div>
+        <div><dt>Arrives in</dt><dd className="num">{preview.state === 'done' ? `About ${mins} min` : '\u2014'}</dd></div>
+      </dl>
 
       {run.state === 'tracking' ? (
         <Tracking run={run} symbol={d.symbol} />
       ) : (
         <>
-          <button className="go" type="button" disabled={!canClaim || busy} onClick={claim}>
-            {busy ? run.step : connected ? 'Claim and convert' : 'Connect wallet and claim'}
+          <button className="btn btn-primary btn-block" type="button" disabled={!canClaim || busy} onClick={claim}>
+            {busy ? run.step : connected ? 'Claim and rewire' : 'Connect wallet and claim'}
           </button>
-          {run.state === 'error' && <p className="error center">{run.error}</p>}
-          {mobileNoWallet && <p className="hint center">On a phone, this opens the site inside Phantom so you can sign.</p>}
+          {run.state === 'error' && <p className="note warn center">{run.error}</p>}
+          {mobileNoWallet && <p className="note center">On a phone, this opens Rewire inside Phantom so you can sign.</p>}
         </>
       )}
     </div>
@@ -240,8 +258,8 @@ function Tracking({ run, symbol }) {
   return (
     <div className="track" data-done={done}>
       <p className="track-status">{LABEL[run.status] || run.status}</p>
-      {done && run.amountOut && <p className="big">{fmt(run.amountOut, 6)} <span>{symbol}</span></p>}
-      {run.status === 'REFUNDED' && <p className="hint">The SOL went back to your wallet. You can try again.</p>}
+      {done && run.amountOut && <p className="big num">{fmt(run.amountOut, 6)}<span> {symbol}</span></p>}
+      {run.status === 'REFUNDED' && <p className="note">The SOL went back to your wallet. You can try again.</p>}
       <p className="links">
         <a href={`https://solscan.io/tx/${run.signature}`} target="_blank" rel="noreferrer">Your claim on Solscan</a>
         {(run.destinationTx || []).map((u) => (
