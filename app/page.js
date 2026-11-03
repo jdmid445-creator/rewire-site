@@ -2,6 +2,7 @@ import Converter from '@/components/Converter';
 import Rates from '@/components/Rates';
 import { CoinIcon } from '@/components/Brand';
 import Reveal from '@/components/Reveal';
+import LiveFeed from '@/components/LiveFeed';
 
 const HOPS = [
   { t: 'Claim', where: 'pump.fun', d: 'Your unclaimed fees from the bonding curve and PumpSwap move into your wallet.' },
@@ -40,6 +41,12 @@ export default function Home() {
             <Side side="out" />
           </div>
         </div>
+      </section>
+
+      <section id="live" className="section container" data-reveal>
+        <h2 className="h2 center-text">Rewires, as they happen</h2>
+        <p className="lede center-text">Every swap below is real, read straight from NEAR Intents.</p>
+        <LiveFeed />
       </section>
 
       <section id="how" className="section container" data-reveal>

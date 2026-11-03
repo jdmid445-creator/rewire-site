@@ -12,6 +12,7 @@ export default function Header() {
           <span>{SITE.name}</span>
         </Link>
         <nav className="nav" aria-label="Main">
+          <Link href="/#live" className="nav-link">Live</Link>
           <Link href="/#how" className="nav-link">How it works</Link>
           <Link href="/#coins" className="nav-link">Coins</Link>
           <Link href="/docs" className="nav-link">Docs</Link>

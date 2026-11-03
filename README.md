@@ -9,6 +9,7 @@ transaction that claims their fees and sends them into a one-time NEAR Intents (
 | --- | --- | --- |
 | `SOLANA_RPC_URL` | yes | Full Solana RPC URL, e.g. your Helius mainnet URL with key |
 | `ONECLICK_JWT` | recommended | NEAR Intents partner API key (avoids the 1Click fee) |
+| `EXPLORER_JWT` | optional | NEAR Intents explorer key for the live feed. Falls back to `ONECLICK_JWT` |
 | `APP_FEE_BPS` | optional | Rewire's fee in basis points, e.g. `25` = 0.25%. Max 200 |
 | `APP_FEE_RECIPIENT` | optional | NEAR account that receives the app fee |
 
@@ -20,3 +21,9 @@ transaction that claims their fees and sends them into a one-time NEAR Intents (
    no larger than the unclaimed fees, then builds one unsigned transaction: claim fees + transfer to the deposit
    address. It is simulated before it's returned.
 4. The browser wallet signs and sends it; `/api/submit` notifies 1Click; `/api/status` tracks delivery.
+
+## Live feed
+
+`/api/feed` reads real Rewire swaps from the NEAR Intents explorer by the `rewirefees` referral (and the app-fee
+account when set), cached for 20s. Wallets and deposit addresses never leave the server; rows show a blurred stand-in.
+No swaps means an empty feed. Never seed it with sample data.
