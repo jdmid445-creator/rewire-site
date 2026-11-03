@@ -3,6 +3,8 @@ import Rates from '@/components/Rates';
 import { CoinIcon } from '@/components/Brand';
 import Reveal from '@/components/Reveal';
 import LiveFeed from '@/components/LiveFeed';
+import Ticker from '@/components/Ticker';
+import ClaimJump from '@/components/ClaimJump';
 
 const HOPS = [
   { t: 'Claim', where: 'pump.fun', d: 'Your unclaimed fees from the bonding curve and PumpSwap move into your wallet.' },
@@ -31,6 +33,7 @@ export default function Home() {
     <>
       <Reveal />
       <section className="hero">
+        <div className="hero-photo" aria-hidden="true" />
         <Backdrop />
         <div className="container hero-inner">
           <h1><span className="rise" style={{ '--d': '0ms' }}>Your pump.fun fees,</span> <span className="rise" style={{ '--d': '120ms' }}>paid out in any coin.</span></h1>
@@ -43,17 +46,29 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="live" className="section container" data-reveal>
-        <h2 className="h2 center-text">Rewires, as they happen</h2>
-        <p className="lede center-text">Every swap below is real, read straight from NEAR Intents.</p>
-        <LiveFeed />
+      <Ticker />
+
+      <section id="live" className="band band-grid" data-reveal>
+        <div className="container split">
+          <div className="split-copy">
+            <h2 className="h2">Every rewire, out in the open.</h2>
+            <p className="lede">This feed reads swaps straight from NEAR Intents, so what you see is what actually happened.</p>
+            <ul className="proof">
+              <li><Dot />Only real swaps, never samples</li>
+              <li><Dot />Wallets always hidden</li>
+              <li><Dot />Updates every 15 seconds</li>
+            </ul>
+          </div>
+          <LiveFeed />
+        </div>
       </section>
 
       <section id="how" className="section container" data-reveal>
         <h2 className="h2 center-text">One transaction, three hops</h2>
         <p className="lede center-text">Everything below happens from a single signature in your own wallet.</p>
+        <div className="track-wrap">
+        <span className="track-line" aria-hidden="true" />
         <ol className="track">
-          <span className="track-line" aria-hidden="true" />
           {HOPS.map((h, i) => (
             <li key={h.t}>
               <span className="track-n num">{i + 1}</span>
@@ -62,11 +77,17 @@ export default function Home() {
             </li>
           ))}
         </ol>
+        </div>
       </section>
 
-      <section id="coins" className="section container" data-reveal>
-        <h2 className="h2 center-text">What 1 SOL gets you right now</h2>
-        <Rates />
+      <section id="coins" className="band" data-reveal>
+        <div className="container split split-rates">
+          <div className="split-copy">
+            <h2 className="h2">What 1 SOL gets you right now</h2>
+            <p className="lede">Ten coins across eight chains, priced live by NEAR Intents. Your quote in the card is the exact amount, fees included.</p>
+          </div>
+          <Rates />
+        </div>
       </section>
 
       <section className="section container" data-reveal>
@@ -82,6 +103,15 @@ export default function Home() {
               ))}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="cta" data-reveal>
+        <div className="cta-photo" aria-hidden="true" />
+        <div className="container cta-inner">
+          <h2 className="cta-title">Your fees are sitting there.</h2>
+          <p className="lede">Paste your creator wallet and see what&rsquo;s waiting. Checking is free and doesn&rsquo;t need a wallet connection.</p>
+          <ClaimJump className="btn btn-primary btn-cta">Check my fees</ClaimJump>
         </div>
       </section>
 
@@ -160,4 +190,8 @@ function Backdrop() {
       </svg>
     </div>
   );
+}
+
+function Dot() {
+  return <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }

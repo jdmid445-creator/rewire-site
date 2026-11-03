@@ -9,10 +9,15 @@ export default function Footer() {
       <div className="container footer-row">
         <span className="brand small-brand"><Logo size={24} /> {SITE.name}</span>
         <nav className="footer-links" aria-label="Footer">
+          <Link href="/#live">Live</Link>
+          <Link href="/#how">How it works</Link>
           <Link href="/docs">Docs</Link>
           {SITE.x && <a href={SITE.x} target="_blank" rel="noopener noreferrer">X</a>}
           <CopyCA full />
         </nav>
+      </div>
+      <div className="container">
+        <p className="wordmark" aria-hidden="true">{SITE.name}</p>
       </div>
       <p className="container fine-print">Swaps run on NEAR Intents. Not affiliated with pump.fun or NEAR. Not financial advice.</p>
     </footer>

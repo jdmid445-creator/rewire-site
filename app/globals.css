@@ -350,3 +350,99 @@ h1 > span { display: block; }
   @keyframes arrive { from { opacity: 0; transform: translateY(-10px); background: rgba(46, 155, 255, .18); } to { opacity: 1; transform: none; } }
 }
 @media (max-width: 720px) { .feed-wallet { display: none; } .feed-list li { gap: 10px; padding: 11px 12px; } .feed-main strong { font-size: 14px; } }
+
+/* ================= Design pass 3: photography, bands, ticker ================= */
+
+/* Hero photograph: the patch-cable rack, cables converging on the claim card. */
+.hero-photo {
+  position: absolute; inset: 0 0 auto; height: 980px; z-index: -1; pointer-events: none;
+  background: url('/img/rack-soft.webp') center 30% / cover no-repeat;
+  opacity: .3;
+  -webkit-mask-image: radial-gradient(120% 75% at 50% 18%, #000 30%, transparent 78%);
+          mask-image: radial-gradient(120% 75% at 50% 18%, #000 30%, transparent 78%);
+}
+.hero::after { /* keeps the headline crisp over the photo */
+  content: ''; position: absolute; left: 50%; top: 40px; width: min(1100px, 100%); height: 420px; transform: translateX(-50%);
+  background: radial-gradient(50% 50% at 50% 50%, rgba(9, 9, 11, .85), transparent 78%); z-index: 0; pointer-events: none;
+}
+.hero .backdrop { z-index: 0; }
+.hero-inner { z-index: 2; }
+.hero { padding-bottom: 88px; }
+@media (max-width: 720px) { .hero-photo { background-image: url('/img/rack-sm.webp'); height: 720px; opacity: .36; } }
+
+/* Ticker */
+.ticker { position: relative; overflow: hidden; border-block: 1px solid var(--line); background: rgba(17, 17, 20, .7); height: 52px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.ticker.is-empty { border-color: transparent; background: transparent; }
+.tk-track { list-style: none; margin: 0; padding: 0; display: flex; width: max-content; height: 100%; align-items: center; }
+.tk-track li { display: inline-flex; align-items: center; gap: 9px; padding: 0 30px; white-space: nowrap; font-size: 14.5px; border-right: 1px solid var(--line); }
+.tk-track li.tk-gap { padding: 0; border: 0; }
+.tk-sol { color: var(--muted); }
+.tk-arrow { color: var(--wire); display: inline-flex; }
+.tk-val { font-family: var(--display); font-weight: 600; }
+.tk-chain { color: var(--dim); font-size: 13px; }
+@media (prefers-reduced-motion: no-preference) {
+  .tk-track { animation: marquee 70s linear infinite; }
+  .ticker:hover .tk-track { animation-play-state: paused; }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+}
+@media (prefers-reduced-motion: reduce) { .ticker { overflow-x: auto; } }
+
+/* Bands: full-width sections with their own surface, so the page has rhythm */
+.band { position: relative; margin-top: 120px; padding: 96px 0; border-block: 1px solid var(--line); background: linear-gradient(180deg, rgba(23, 23, 27, .55), rgba(14, 14, 17, .55)); overflow: hidden; isolation: isolate; }
+.band + .band { margin-top: 0; border-top: 0; }
+.band-grid::before { /* blueprint grid, fading out toward the edges */
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background-image: linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px);
+  background-size: 44px 44px; background-position: center;
+  -webkit-mask-image: radial-gradient(70% 80% at 50% 50%, #000, transparent); mask-image: radial-gradient(70% 80% at 50% 50%, #000, transparent);
+}
+.band-grid::after { /* the cable texture, barely there on the left */
+  content: ''; position: absolute; left: -6%; top: 0; bottom: 0; width: 46%; z-index: -2; opacity: .16;
+  background: url('/img/coil.webp') center / cover;
+  -webkit-mask-image: linear-gradient(90deg, #000, transparent); mask-image: linear-gradient(90deg, #000, transparent);
+}
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 64px; align-items: center; }
+.split-copy .h2 { max-width: 13ch; }
+.split-copy .lede { margin: 18px 0 0; max-width: 30em; }
+.split .feed, .split .rates { margin: 0; max-width: none; width: 100%; }
+.split-rates { grid-template-columns: minmax(0, .85fr) minmax(0, 1.3fr); }
+.proof { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 12px; }
+.proof li { display: flex; align-items: center; gap: 10px; color: var(--soft); }
+.proof svg { color: var(--wire); flex: none; }
+
+/* Three hops: line now lives on a wrapper so the list stays valid */
+.track-wrap { position: relative; margin-top: 48px; border-radius: 22px; overflow: hidden; }
+.track-wrap ol.track { margin-top: 0; }
+.track-wrap .track-line { z-index: 1; }
+
+/* Closing call to action over the rack photo */
+.cta { position: relative; margin-top: 140px; padding: 150px 0; overflow: hidden; isolation: isolate; text-align: center; border-block: 1px solid var(--line); }
+.cta-photo { position: absolute; inset: 0; z-index: -1; background: url('/img/rack.webp') center 45% / cover no-repeat; opacity: .85; }
+.cta::after { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(42% 60% at 50% 50%, rgba(9, 9, 11, .72), rgba(9, 9, 11, .35) 70%, rgba(9, 9, 11, .7)), linear-gradient(180deg, var(--bg), transparent 22%, transparent 78%, var(--bg)); }
+.cta-inner { display: flex; flex-direction: column; align-items: center; }
+.cta-title { font-size: clamp(40px, 6vw, 76px); line-height: 1; letter-spacing: -0.045em; font-weight: 650; max-width: 14ch; }
+.cta .lede { color: var(--soft); max-width: 30em; text-wrap: balance; }
+.btn-cta { margin-top: 34px; min-width: 220px; text-decoration: none; }
+
+/* Footer wordmark */
+.site-footer { margin-top: 0; padding-top: 40px; }
+.cta + .section { padding-top: 120px; }
+.wordmark { margin: 36px 0 0; font-family: var(--display); font-weight: 700; font-size: clamp(96px, 23vw, 340px); line-height: .78; letter-spacing: -0.06em; text-align: center;
+  background: linear-gradient(180deg, rgba(237, 237, 240, .14), rgba(237, 237, 240, 0) 85%); -webkit-background-clip: text; background-clip: text; color: transparent; user-select: none; }
+.site-footer .fine-print { margin-top: 8px; }
+.narrow-col + * { }
+main > section:last-child { margin-bottom: 120px; }
+
+@media (max-width: 960px) {
+  .split, .split-rates { grid-template-columns: 1fr; gap: 36px; }
+  .split-copy { text-align: center; }
+  .split-copy .h2, .split-copy .lede { margin-inline: auto; }
+  .proof { justify-content: center; grid-auto-flow: row; }
+  .proof li { justify-content: center; }
+}
+@media (max-width: 720px) {
+  .band { margin-top: 80px; padding: 64px 0; }
+  .cta { margin-top: 90px; padding: 96px 0; }
+  .band-grid::after { display: none; }
+}

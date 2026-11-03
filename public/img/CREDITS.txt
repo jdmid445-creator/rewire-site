@@ -1,0 +1,3 @@
+rack.webp, rack-sm.webp: "a bunch of blue wires connected to each other", Unsplash photo PSpf_XgOM5w (Unsplash License)
+coil.webp: "a pile of black wires sitting on top of each other", Unsplash photo WdnrKQzwEAI (Unsplash License)
+Both color-graded for the site.
