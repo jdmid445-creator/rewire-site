@@ -51,13 +51,14 @@ export async function POST(req) {
   }
 }
 
-// Well-known burn/zero-style addresses, only used for dry previews (no funds move on a dry quote).
+// Format-valid stand-in addresses, only used for dry previews before someone enters theirs (no funds move on a dry quote).
+// NEAR Intents rejects burn addresses like 0x...dEaD, so these are ordinary-looking addresses nobody controls on purpose.
 function placeholder(dest, wallet) {
   switch (dest.addr) {
-    case 'evm': return '0x000000000000000000000000000000000000dEaD';
+    case 'evm': return '0x32caaa3c1481e7f7ed84516cce7cc0e453883a65';
     case 'btc': return 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh';
     case 'sol': return wallet.toBase58();
-    case 'zec': return 't1Zcash1111111111111111111111111111';
+    case 'zec': return 't1MUjBN4Xutp4HSASLv3m26HEB7Kt4xd8fL';
     case 'doge': return 'DH5yaieqoZN36fDVciNyRueRGvGLR3mr7L';
     case 'near': return 'intents.near';
     default: return wallet.toBase58();
