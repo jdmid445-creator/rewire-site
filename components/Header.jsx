@@ -2,27 +2,31 @@ import Link from 'next/link';
 import { SITE } from '@/lib/config';
 import { Logo, XIcon } from './Brand';
 import CopyCA from './CopyCA';
+import ClaimJump from './ClaimJump';
 
 export default function Header() {
   return (
     <header className="site-header">
       <div className="container header-row">
         <Link href="/" className="brand" aria-label={`${SITE.name} home`}>
-          <Logo />
+          <Logo size={28} />
           <span>{SITE.name}</span>
         </Link>
-        <nav className="nav" aria-label="Main">
-          <Link href="/#live" className="nav-link">Live</Link>
-          <Link href="/#how" className="nav-link">How it works</Link>
-          <Link href="/#coins" className="nav-link">Coins</Link>
-          <Link href="/docs" className="nav-link">Docs</Link>
+        <nav className="seg" aria-label="Main">
+          <Link href="/#how">How it works</Link>
+          <Link href="/#live">Live</Link>
+          <Link href="/#coins">Coins</Link>
+          <Link href="/docs">Docs</Link>
+        </nav>
+        <div className="header-end">
           {SITE.x && (
             <a href={SITE.x} className="icon-btn" target="_blank" rel="noopener noreferrer" aria-label={`${SITE.name} on X`}>
               <XIcon />
             </a>
           )}
           <CopyCA />
-        </nav>
+          <ClaimJump className="btn btn-ink btn-sm">Claim fees</ClaimJump>
+        </div>
       </div>
     </header>
   );

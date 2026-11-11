@@ -256,8 +256,14 @@ const LABEL = {
 
 function Tracking({ run, symbol }) {
   const done = run.status === 'SUCCESS';
+  const stage = done ? 2 : ['PROCESSING', 'KNOWN_DEPOSIT_TX'].includes(run.status) ? 1 : 0;
   return (
     <div className="track" data-done={done}>
+      <ol className="steps" aria-label="Progress">
+        {['Claimed', 'Swapping', 'Delivered'].map((s, i) => (
+          <li key={s} data-state={i < stage ? 'done' : i === stage ? 'now' : 'next'}>{s}</li>
+        ))}
+      </ol>
       <p className="track-status">{LABEL[run.status] || run.status}</p>
       {done && run.amountOut && <p className="big num">{fmt(run.amountOut, 6)}<span> {symbol}</span></p>}
       {run.status === 'REFUNDED' && <p className="note">The SOL went back to your wallet. You can try again.</p>}

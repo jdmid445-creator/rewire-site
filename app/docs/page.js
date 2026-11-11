@@ -1,4 +1,5 @@
 import { DESTINATIONS, MIN_LAMPORTS } from '@/lib/config';
+import { CoinIcon } from '@/components/Brand';
 
 export const metadata = { title: 'Docs' };
 
@@ -16,6 +17,7 @@ export default function Docs() {
   return (
     <div className="container docs">
       <nav className="docs-nav" aria-label="Docs">
+        <p>Rewire docs</p>
         {NAV.map(([id, t]) => <a key={id} href={`#${id}`}>{t}</a>)}
       </nav>
       <article className="docs-body">
@@ -40,8 +42,8 @@ export default function Docs() {
         </ul>
 
         <h2 id="coins">Coins and chains</h2>
-        <ul>
-          {DESTINATIONS.map((d) => <li key={d.id}>{d.symbol} on {d.chain}</li>)}
+        <ul className="docs-coins">
+          {DESTINATIONS.map((d) => <li key={d.id}><CoinIcon dest={d} size={24} /> {d.symbol} <span>on {d.chain}</span></li>)}
         </ul>
 
         <h2 id="fees">Fees and minimums</h2>

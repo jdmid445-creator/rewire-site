@@ -1,12 +1,11 @@
 import { DESTINATIONS } from '@/lib/config';
 
-// Logo: two wires that cross once and come out the other side.
-export function Logo({ size = 30 }) {
+// Logo: two wires that cross once and come out the other side. One color, so it reads on any feed.
+export function Logo({ size = 30, tile = false }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="9" fill="#F2F4F7" />
-      <path d="M7 11.5h5.5c4 0 3 9 7 9H25" stroke="#0A0D12" strokeWidth="2.6" fill="none" strokeLinecap="round" />
-      <path d="M7 20.5h5.5c4 0 3-9 7-9H25" stroke="#2E9BFF" strokeWidth="2.6" fill="none" strokeLinecap="round" />
+      {tile && <rect width="32" height="32" rx="9" fill="#fff" />}
+      <path d="M6 11.5h6c4 0 4 9 8 9h6M6 20.5h6c4 0 4-9 8-9h6" stroke="currentColor" strokeWidth="2.8" fill="none" strokeLinecap="round" />
     </svg>
   );
 }

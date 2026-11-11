@@ -1,5 +1,4 @@
-import '@fontsource-variable/funnel-display';
-import '@fontsource-variable/funnel-sans';
+import '@fontsource-variable/geist';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SITE } from '@/lib/config';
@@ -14,7 +13,7 @@ export const metadata = {
   twitter: { card: 'summary_large_image', title: SITE.name, description: SITE.tagline, images: ['/og.jpg'] },
 };
 
-export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#0A0D12' };
+export const viewport = { width: 'device-width', initialScale: 1, themeColor: '#F2F2EF' };
 
 export default function RootLayout({ children }) {
   return (

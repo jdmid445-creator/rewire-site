@@ -1,10 +1,10 @@
 import Converter from '@/components/Converter';
 import Rates from '@/components/Rates';
-import { CoinIcon } from '@/components/Brand';
 import Reveal from '@/components/Reveal';
 import LiveFeed from '@/components/LiveFeed';
-import Ticker from '@/components/Ticker';
 import ClaimJump from '@/components/ClaimJump';
+import Ribbon from '@/components/Ribbon';
+import QuickRates from '@/components/QuickRates';
 
 const HOPS = [
   { t: 'Claim', where: 'pump.fun', d: 'Your unclaimed fees from the bonding curve and PumpSwap move into your wallet.' },
@@ -33,66 +33,69 @@ export default function Home() {
     <>
       <Reveal />
       <section className="hero">
-        <div className="hero-photo" aria-hidden="true" />
-        <Backdrop />
+        <Ribbon />
         <div className="container hero-inner">
-          <h1><span className="rise" style={{ '--d': '0ms' }}>Your pump.fun fees,</span> <span className="rise" style={{ '--d': '120ms' }}>paid out in any coin.</span></h1>
-          <p className="lede rise" style={{ '--d': '260ms' }}>Claim your creator fees and receive BTC, ETH or USDC on their own chains. One signature, and the money never passes through us.</p>
-          <div className="board rise" style={{ '--d': '420ms' }}>
-            <Side side="in" />
-            <Converter />
-            <Side side="out" />
+          <h1 className="hero-title">
+            <span className="rise" style={{ '--d': '80ms' }}>Your pump.fun fees,</span>
+            <span className="rise" style={{ '--d': '180ms' }}>paid out in any coin.</span>
+          </h1>
+          <div className="hero-side rise" style={{ '--d': '320ms' }}>
+            <p>Claim your creator fees and receive BTC, ETH or USDC on their own chains. One signature, and the money never passes through us.</p>
+            <div className="hero-actions">
+              <ClaimJump className="btn btn-ink">Check my fees</ClaimJump>
+              <a href="/docs" className="btn btn-soft">Read the docs</a>
+            </div>
           </div>
         </div>
       </section>
 
-      <Ticker />
-
-      <section id="live" className="band band-grid" data-reveal>
-        <div className="container split">
-          <div className="split-copy">
-            <h2 className="h2">Every rewire, out in the open.</h2>
-            <p className="lede">This feed reads swaps straight from NEAR Intents, so what you see is what actually happened.</p>
-            <ul className="proof">
-              <li><Dot />Only real swaps, never samples</li>
-              <li><Dot />Wallets always hidden</li>
-              <li><Dot />Updates every 15 seconds</li>
-            </ul>
-          </div>
-          <LiveFeed />
+      <section className="desk container" aria-label="Claim">
+        <aside className="desk-side desk-left" id="how">
+          <h2 className="side-title">One signature, three hops</h2>
+          <ol className="hops">
+            {HOPS.map((h, i) => (
+              <li key={h.t}>
+                <span className="hop-n">{i + 1}</span>
+                <span>
+                  <strong>{h.t}</strong> <span className="hop-where">on {h.where}</span>
+                  <span className="hop-d">{h.d}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        </aside>
+        <div className="desk-main">
+          <Converter />
         </div>
+        <aside className="desk-side desk-right">
+          <h2 className="side-title">1 SOL right now</h2>
+          <QuickRates />
+          <a href="#coins" className="side-link">All ten coins</a>
+        </aside>
       </section>
 
-      <section id="how" className="section container" data-reveal>
-        <h2 className="h2 center-text">One transaction, three hops</h2>
-        <p className="lede center-text">Everything below happens from a single signature in your own wallet.</p>
-        <div className="track-wrap">
-        <span className="track-line" aria-hidden="true" />
-        <ol className="track">
-          {HOPS.map((h, i) => (
-            <li key={h.t}>
-              <span className="track-n num">{i + 1}</span>
-              <h3>{h.t} <span className="track-where">on {h.where}</span></h3>
-              <p>{h.d}</p>
-            </li>
-          ))}
-        </ol>
+      <section id="live" className="section container" data-reveal>
+        <div className="sec-head">
+          <h2 className="h2">Every rewire, out in the open</h2>
+          <p className="lede">Read straight from NEAR Intents. Only real swaps, wallets always hidden.</p>
         </div>
+        <LiveFeed />
       </section>
 
-      <section id="coins" className="band" data-reveal>
-        <div className="container split split-rates">
-          <div className="split-copy">
-            <h2 className="h2">What 1 SOL gets you right now</h2>
-            <p className="lede">Ten coins across eight chains, priced live by NEAR Intents. Your quote in the card is the exact amount, fees included.</p>
-          </div>
-          <Rates />
+      <section id="coins" className="section container" data-reveal>
+        <div className="sec-head">
+          <h2 className="h2">Ten coins, eight chains</h2>
+          <p className="lede">Priced live by NEAR Intents. The quote in the card is the exact amount, fees included.</p>
         </div>
+        <Rates />
       </section>
 
       <section className="section container" data-reveal>
-        <h2 className="h2 center-text">Cashing out, compared</h2>
-        <div className="table-wrap">
+        <div className="sec-head">
+          <h2 className="h2">Cashing out, compared</h2>
+          <p className="lede">What it takes to turn creator fees into another coin, the usual way and with Rewire.</p>
+        </div>
+        <div className="panel table-wrap">
           <table className="compare-table">
             <thead>
               <tr><th scope="col"><span className="sr-only">Step</span></th><th scope="col">The usual way</th><th scope="col">With Rewire</th></tr>
@@ -106,92 +109,28 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="cta" data-reveal>
-        <div className="cta-photo" aria-hidden="true" />
-        <div className="container cta-inner">
-          <h2 className="cta-title">Your fees are sitting there.</h2>
-          <p className="lede">Paste your creator wallet and see what&rsquo;s waiting. Checking is free and doesn&rsquo;t need a wallet connection.</p>
-          <ClaimJump className="btn btn-primary btn-cta">Check my fees</ClaimJump>
+      <section className="section container" data-reveal>
+        <div className="sec-head">
+          <h2 className="h2">Questions</h2>
+          <p className="lede">More detail in the <a href="/docs" className="inline-link">docs</a>.</p>
         </div>
-      </section>
-
-      <section className="section container narrow-col" data-reveal>
-        <h2 className="h2 center-text">Questions</h2>
-        <div className="faq">
+        <div className="panel faq">
           {FAQ.map(([q, a]) => (
             <details key={q}>
-              <summary>{q}</summary>
+              <summary>{q}<span className="plus" aria-hidden="true" /></summary>
               <p>{a}</p>
             </details>
           ))}
         </div>
       </section>
+
+      <section className="section container" data-reveal>
+        <div className="cta panel">
+          <h2 className="cta-title">Your fees are sitting there.</h2>
+          <p className="lede">Paste your creator wallet and see what&rsquo;s waiting. Checking is free and needs no wallet connection.</p>
+          <ClaimJump className="btn btn-ink">Check my fees</ClaimJump>
+        </div>
+      </section>
     </>
   );
-}
-
-// Schematic on either side of the tool: fee sources wire in on the left, payout coins wire out on the right.
-function Side({ side }) {
-  const items = side === 'in'
-    ? [{ label: 'Bonding curve', sub: 'Creator fees' }, { label: 'PumpSwap', sub: 'Creator fees' }, { label: 'Fee split', sub: 'Your share' }]
-    : [{ coin: 'btc' }, { coin: 'eth' }, { coin: 'usdc-base' }];
-  return (
-    <div className={`side side-${side}`} aria-hidden="true">
-      {items.map((it, i) => (
-        <div className="node-row" key={i}>
-          <span className="node">
-            {it.coin ? (
-              <>
-                <CoinIcon dest={it.coin} size={22} />
-                <span><strong>{it.coin === 'usdc-base' ? 'USDC' : it.coin.toUpperCase()}</strong><span>{it.coin === 'btc' ? 'Bitcoin' : it.coin === 'eth' ? 'Ethereum' : 'Base'}</span></span>
-              </>
-            ) : (
-              <>
-                <img src="/coins/sol.svg" alt="" width="22" height="22" />
-                <span><strong>{it.label}</strong><span>{it.sub}</span></span>
-              </>
-            )}
-          </span>
-          <span className="wire"><span className="pulse" style={{ '--i': i }} /></span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// Hero backdrop: a bundle of cables that pinches through the tool, a horizon arc, and a few live strands.
-function Backdrop() {
-  const strands = [];
-  for (let k = 0; k < 14; k++) {
-    const spread = (k - 6.5) * 22;
-    const y0 = 600 + spread * 1.35;
-    const yc = 640 + spread * 0.12;
-    strands.push(`M-40 ${y0.toFixed(1)} C 420 ${y0.toFixed(1)}, 520 ${yc.toFixed(1)}, 720 ${yc.toFixed(1)} S 1020 ${y0.toFixed(1)}, 1480 ${y0.toFixed(1)}`);
-  }
-  return (
-    <div className="backdrop" aria-hidden="true">
-      <div className="horizon" />
-      <svg className="cables" viewBox="0 0 1440 940" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="cable-fade" x1="0" x2="1">
-            <stop offset="0" stopColor="#fff" stopOpacity="0" />
-            <stop offset=".3" stopColor="#fff" stopOpacity=".07" />
-            <stop offset=".5" stopColor="#fff" stopOpacity=".02" />
-            <stop offset=".7" stopColor="#fff" stopOpacity=".07" />
-            <stop offset="1" stopColor="#fff" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <g fill="none" stroke="url(#cable-fade)" strokeWidth="1">
-          {strands.map((d, i) => <path key={i} d={d} />)}
-        </g>
-        <g fill="none" stroke="#2E9BFF" strokeWidth="1.4" strokeLinecap="round">
-          {[2, 6, 9, 12].map((i, n) => <path key={i} className="strand-live" d={strands[i]} style={{ '--n': n }} pathLength="100" />)}
-        </g>
-      </svg>
-    </div>
-  );
-}
-
-function Dot() {
-  return <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
