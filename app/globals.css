@@ -57,7 +57,7 @@ button { font: inherit; color: inherit; }
 .btn-block { width: 100%; min-height: 54px; font-size: 16px; }
 
 /* Header: brand left, one segmented group in the middle, actions right */
-.site-header { position: sticky; top: 0; z-index: 30; padding: 12px 0; transition: opacity .35s var(--ease), transform .45s var(--ease), background-color .35s ease, box-shadow .35s ease; }
+.site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 30; padding: 12px 0; transition: opacity .35s var(--ease), transform .45s var(--ease), background-color .35s ease, box-shadow .35s ease; }
 .site-header.is-solid { background: rgba(242, 242, 239, .82); box-shadow: 0 1px 0 var(--hair); backdrop-filter: saturate(1.3) blur(14px); -webkit-backdrop-filter: saturate(1.3) blur(14px); }
 .site-header.is-solid .seg { box-shadow: inset 0 0 0 1px var(--hair); }
 .site-header.is-away { opacity: 0; transform: translateY(-14px); pointer-events: none; }
@@ -74,7 +74,7 @@ button { font: inherit; color: inherit; }
 .ca-pill.is-soon { color: var(--muted); cursor: default; }
 
 /* Hero */
-.hero { position: relative; height: max(600px, calc(100svh - 150px)); margin-top: -62px; display: flex; align-items: flex-end; overflow: hidden; }
+.hero { position: relative; height: max(600px, calc(100svh - 150px)); display: flex; align-items: flex-end; overflow: hidden; }
 .ribbon { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s ease; }
 .ribbon.is-ready { opacity: 1; }
 .ribbon canvas { width: 100% !important; height: 100% !important; display: block; }
@@ -231,7 +231,7 @@ button { font: inherit; color: inherit; }
 .fine-print { margin-top: 20px; font-size: 12.5px; color: var(--dim); text-align: center; }
 
 /* Docs: GitBook-style sidebar and page */
-.docs { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 28px; padding-top: 24px; align-items: start; }
+.docs { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 28px; padding-top: 100px; align-items: start; }
 .docs-nav { position: sticky; top: 84px; display: grid; gap: 2px; padding: 8px; }
 .docs-nav p { margin: 6px 12px 8px; font-size: 13px; color: var(--muted); }
 .docs-nav a { padding: 8px 12px; border-radius: 10px; font-size: 14.5px; color: var(--soft); }
@@ -280,7 +280,8 @@ button { font: inherit; color: inherit; }
   .site-header { padding: 10px 0; }
   .header-row { grid-template-columns: 1fr auto; }
   .seg, .header-end .ca-pill, .icon-btn { display: none; }
-  .hero { height: auto; min-height: 640px; margin-top: -58px; padding-top: 330px; }
+  .hero { height: auto; min-height: 640px; padding-top: 330px; }
+  .docs { padding-top: 84px; }
   .hero-inner { grid-template-columns: 1fr; gap: 20px; padding-bottom: 120px; }
   .hero-title { white-space: normal; font-size: clamp(40px, 11.5vw, 54px); }
   .hero-side { justify-self: stretch; max-width: none; }
