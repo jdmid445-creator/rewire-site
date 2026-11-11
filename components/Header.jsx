@@ -3,10 +3,12 @@ import { SITE } from '@/lib/config';
 import { Logo, XIcon } from './Brand';
 import CopyCA from './CopyCA';
 import ClaimJump from './ClaimJump';
+import HeaderFade from './HeaderFade';
 
 export default function Header() {
   return (
     <header className="site-header">
+      <HeaderFade />
       <div className="container header-row">
         <Link href="/" className="brand" aria-label={`${SITE.name} home`}>
           <Logo size={28} />
